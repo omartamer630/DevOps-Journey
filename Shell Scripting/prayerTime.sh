@@ -1,5 +1,4 @@
 #! /usr/bin/bash
-#! /usr/bin/python3
 
 #clear
 function prayerTime(){

@@ -9,4 +9,4 @@ res=`curl -L -s "http://api.aladhan.com/v1/timingsByCity?city=Alexandria&country
 echo "${res}" | jq '.data.timings'
 }
 
-prayerTimeb
+prayerTime

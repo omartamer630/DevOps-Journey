@@ -5,16 +5,16 @@ contactNumber=1
 
 while [ ${m} = TRUE ];
 do
-read -p "press i to add new contact
-press v to view all contacts 
-press s to search for a record
-press e to delete all contacts
-press d to delete one contact
-press q to exit
+read -p "press (i) to add new contact
+press (v) to view all contacts 
+press (s) to search for a record
+press (e) to delete all contacts
+press (d)to delete one contact
+press (q) to exit
 " choice
 
-case ${choice} in
- "i") # add new contact
+function addContact() {
+
   echo "Contact-${contactNumber}" >> database.txt
   read -p "Enter your First name: " fname
   echo "First Name: $fname" >> database.txt
@@ -27,9 +27,9 @@ case ${choice} in
   echo "------------------------" >> database.txt
   
   ((contactNumber++))
-  ;;
- "v") # view all contacts
-  if [ -f "database.txt" ]; then
+}
+function viewAllContacts() {
+    if [ -f "database.txt" ]; then
     echo "------------------------"
     echo "All Contacts"
     echo "------------------------"
@@ -37,16 +37,16 @@ case ${choice} in
   else
     echo "No contacts found."
   fi
-  ;;
- "s") # search for a contact
-  read -p "Enter the name of the contact you want to search for: " searchName
+}
+function searchContact() {
+    read -p "Enter the name of the contact you want to search for: " searchName
   if [ -f "database.txt" ]; then
-    grep -i "${searchName}" database.txt || echo "No match found."
+    sed -n "/First Name: ${searchName}/,/------------------------/p" database.txt
   else
     echo "No contacts found."
   fi
-  ;;
- "e") # delete all contacts
+}
+function deleteAllContacts() {
   if [ -f "database.txt" ]; then
     rm database.txt
     echo "------------------------"
@@ -55,21 +55,37 @@ case ${choice} in
   else
     echo "No contacts to delete."
   fi
-  ;;
- "d") # delete one contact
-  if [ -f "database.txt" ]; then
+}
+function deleteOneContact(){
+    if [ -f "database.txt" ]; then
     read -p "Enter the contact number you want to delete (e.g., 1 for Contact-1): " deleteNumber
     sed -i "/Contact-${deleteNumber}/,/------------------------/d" database.txt
     echo "Contact-${deleteNumber} deleted if it existed."
   else
     echo "No contacts found."
   fi
+}
+case ${choice} in
+ "i")
+    addContact  #add new contact 
   ;;
- "q") # exit
-  m=FALSE
+ "v") 
+    viewAllContacts # view all contacts
   ;;
-  *) # invalid option
-  echo "Invalid option. Please try again."
+ "s") 
+    searchContact # search for a contact
+  ;;
+ "e") 
+    deleteAllContacts # delete all contacts
+  ;;
+ "d") 
+    deleteOneContact # delete one contact
+  ;;
+ "q") 
+    exit # exit
+  ;;
+  *) 
+  echo "Invalid option. Please try again." # invalid option
   ;;
 esac
 
